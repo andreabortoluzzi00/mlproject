@@ -9,14 +9,14 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from src.exception import CustmoException
+from src.exception import CustomException       
 from src.logger import logging
 
 from src.utils import save_object
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_ob_file_path= os.path.join('artifact',"preprocessor.pkl")
+    preprocessor_obj_file_path= os.path.join('artifact',"preprocessor.pkl")
 
 class DataTransformation:
     def __init__(self):
@@ -45,7 +45,7 @@ class DataTransformation:
                 steps=[
                     ("imputer",SimpleImputer(strategy="most_frequent")),
                     ("one_hot_encoder", OneHotEncoder()),
-                    ("scaler", StandardScaler())
+                    ("scaler", StandardScaler(with_mean=False))
                 ]
 
             )
@@ -63,7 +63,7 @@ class DataTransformation:
             return preprocessor
         
         except Exception as e:
-            raise CustmoException(e,sys)
+            raise CustomException(e,sys)
         
     def initiate_data_transformation(self,train_path, test_path):
 
@@ -100,10 +100,10 @@ class DataTransformation:
                 input_feature_test_arr, np.array(target_feature_test_df)
             ]
 
-            logging.info("Saved preprocessing objext.")
+            logging.info("Saved preprocessing object.")
 
             save_object(
-                file_path = self.data_transformation_config.preprocessor_ob_file_path,
+                file_path = self.data_transformation_config.preprocessor_obj_file_path,
                 obj = preprocessing_obj
 
             )
@@ -116,5 +116,5 @@ class DataTransformation:
             )
 
         except Exception as e:
-            raise CustmoException(e,sys)
+            raise CustomException(e,sys)
 

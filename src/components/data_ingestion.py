@@ -1,6 +1,6 @@
 import os
 import sys
-from src.exception import CustmoException
+from src.exception import CustomException
 from src.logger import logging
 import pandas as pd 
 
@@ -41,12 +41,13 @@ class DataIngestion:
 
             logging.info("INgestion of the data is completed")
 
-            return(self.ingestion_config.train_data_path, 
-                   self.ingestion_config.test_data_path
-                   )
+            return(
+                self.ingestion_config.train_data_path, 
+                self.ingestion_config.test_data_path
+            )
 
         except Exception as e:
-            raise CustmoException(e,sys)
+            raise CustomException(e,sys)
 
 
 if __name__ == "__main__":
@@ -54,4 +55,4 @@ if __name__ == "__main__":
     train_data, test_data= obj.initiate_data_ingestion()
 
     data_transformation = DataTransformation()
-    train_arr,test_arr= data_transformation.initiate_data_transformation(train_data,test_data)
+    train_arr,test_arr,_= data_transformation.initiate_data_transformation(train_data,test_data)
